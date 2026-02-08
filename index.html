@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Access</title>
+
+<style>
+body{
+  margin:0;
+  background:#2f3548;
+  font-family:-apple-system,BlinkMacSystemFont;
+  display:flex;
+  justify-content:center;
+  padding-top:30px;
+}
+.card{
+  width:360px;
+  background:#fff;
+  border-radius:18px;
+  overflow:hidden;
+}
+.header{
+  background:#2f3548;
+  color:#f6d58b;
+  text-align:center;
+  padding:16px;
+  font-size:18px;
+  font-weight:600;
+}
+.notice{
+  background:#fbbf24;
+  color:#fff;
+  text-align:center;
+  padding:10px;
+}
+.content{
+  text-align:center;
+  padding:15px;
+}
+.time{
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:10px;
+}
+img{
+  width:260px;
+  height:260px;
+}
+.text{
+  color:#999;
+  margin-top:8px;
+}
+.countdown{
+  font-size:30px;
+  color:#22c55e;
+  font-weight:bold;
+}
+.footer{
+  padding:15px;
+  font-size:12px;
+  color:#aaa;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <!-- 🔹 ĐỔI TÊN + MÃ NHÂN VIÊN TẠI ĐÂY -->
+  <div class="header" id="empName">
+    Cà Văn Trọng (V26020431)
+  </div>
+
+  <div class="notice">
+    将二维码对准扫描器刷新出场
+  </div>
+
+  <div class="content">
+    <div class="time" id="datetime"></div>
+
+    <img id="qr">
+
+    <div class="text">刷新二维码</div>
+    <div class="countdown" id="cd">00:00:20</div>
+  </div>
+
+  <div class="footer">
+    尊敬的员工您好，您已进入企业涉密区域，
+    出于企业安全考虑，您的手机摄像头将被禁止，
+    感谢您的配合。
+  </div>
+</div>
+
+<script>
+let countdown = 60;
+
+// ⏱ Thời gian thực
+function updateTime(){
+  const d = new Date();
+  const t =
+    d.getFullYear()+"-"+
+    String(d.getMonth()+1).padStart(2,"0")+"-"+
+    String(d.getDate()).padStart(2,"0")+" "+
+    String(d.getHours()).padStart(2,"0")+":"+
+    String(d.getMinutes()).padStart(2,"0")+":"+
+    String(d.getSeconds()).padStart(2,"0");
+  document.getElementById("datetime").innerText = t;
+}
+
+// 🔁 QR mới
+function refreshQR(){
+  const data = "EMP-"+Date.now();
+  document.getElementById("qr").src =
+    "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data="+data;
+}
+
+// ⏳ Đếm ngược
+setInterval(()=>{
+  countdown--;
+  if(countdown === 0){
+    countdown = 20;
+    refreshQR();
+  }
+  document.getElementById("cd").innerText =
+    "00:00:"+String(countdown).padStart(2,"0");
+},1000);
+
+setInterval(updateTime,1000);
+updateTime();
+refreshQR();
+</script>
+
+</body>
+</html>
